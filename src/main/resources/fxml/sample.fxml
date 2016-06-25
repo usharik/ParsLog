@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane alignment="CENTER" hgap="10.0" prefWidth="864.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.alexus.parslog.controller.Controller">
+  <children>
+    <AnchorPane prefHeight="838.0" prefWidth="728.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+      <children>
+        <SplitPane dividerPositions="0.2937158469945355, 0.6844262295081968" focusTraversable="true" orientation="VERTICAL" prefHeight="734.0" prefWidth="864.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0">
+          <items>
+            <TextArea fx:id="sourceText" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="378.0" prefWidth="726.0" style="-fx-font-family: monospace;" wrapText="true" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+              <children>
+                <TreeView fx:id="destTree" prefHeight="243.0" prefWidth="862.0" showRoot="false" style="-fx-font-family: monospace;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="39.0">
+                  <contextMenu>
+                    <ContextMenu>
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onSynchronizeTree" text="Synchronize" />
+                      </items>
+                    </ContextMenu>
+                  </contextMenu>
+                </TreeView>
+                <ToolBar layoutY="0.0" prefWidth="862.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <items>
+                    <Button mnemonicParsing="false" text="Apply" />
+                    <Label text="Filter" />
+                    <TextField fx:id="filterText" prefWidth="241.0" style="-fx-font-size: 12px;&#10;-fx-font-family: monospace;" text="" />
+                    <CheckBox id="showUnmached" fx:id="showUnmatched" mnemonicParsing="false" text="Show unmatched" />
+                    <Button mnemonicParsing="false" onMouseClicked="#onExportToXLSX" text="Export to XLSX" />
+                  </items>
+                </ToolBar>
+              </children>
+            </AnchorPane>
+            <TableView id="" fx:id="destTable" prefHeight="200.0" prefWidth="200.0" style="">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Column X" />
+                <TableColumn prefWidth="75.0" text="Column X" />
+              </columns>
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onSynchronizeGrid" text="Synchronize" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </TableView>
+          </items>
+        </SplitPane>
+        <ToolBar prefWidth="862.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="39.0">
+          <items>
+            <Button fx:id="parseWidthButton" mnemonicParsing="false" onMouseClicked="#onWidthParseButtonClicked" text="Apply" />
+            <ComboBox fx:id="widthList" prefHeight="21.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Button fx:id="addPositionButton" mnemonicParsing="false" onMouseClicked="#onAddPositionButtonClicked" text="Add position" />
+            <Button fx:id="clearButton" mnemonicParsing="false" onMouseClicked="#onNextWord" text="-&gt;" />
+            <Button mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" text="Clear" />
+          </items>
+        </ToolBar>
+        <ToolBar layoutY="0.0" prefWidth="725.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+          <items>
+            <Button fx:id="parseButton" mnemonicParsing="false" onMouseClicked="#onParseButtonClicked" text="Apply" />
+            <Label text="Delimiters" />
+            <TextField fx:id="delimText" prefWidth="258.0" style="-fx-font-size: 12px;&#10;-fx-font-family: monospace;" text="(;)" />
+          </items>
+        </ToolBar>
+        <Pane prefHeight="26.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+          <children>
+            <Label fx:id="errorLabel" layoutX="14.0" layoutY="3.0" prefWidth="705.0" text="" textFill="RED" />
+          </children>
+        </Pane>
+      </children>
+    </AnchorPane>
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>
