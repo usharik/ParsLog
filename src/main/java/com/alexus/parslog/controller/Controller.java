@@ -156,6 +156,7 @@ public class Controller implements Initializable {
     public void onAddPositionButtonClicked() {
         int pos = sourceText.getCaretPosition();
         widthList.getItems().add(pos);
+        widthList.setPromptText(Arrays.toString(widthList.getItems().toArray()));
     }
 
     public void onClearButtonClicked() {
@@ -204,8 +205,11 @@ public class Controller implements Initializable {
     }
 
     public void onExportToXLSX() throws IOException {
+        if (parsedLog.getParsedLog().size() == 0) return;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open File");
+        fileChooser.setTitle("Save as XLSX");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLSX documents", "*.xlsx"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File file = fileChooser.showSaveDialog(primaryStage);
 
         if (file != null) {

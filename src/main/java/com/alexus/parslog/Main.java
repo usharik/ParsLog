@@ -18,7 +18,7 @@ public class Main extends Application {
         Controller ctrl = (Controller) loader.getController();
         ctrl.setPrimaryStage(primaryStage);
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("ParsLog");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

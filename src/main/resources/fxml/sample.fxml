@@ -56,7 +56,7 @@
         <ToolBar prefWidth="862.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="39.0">
           <items>
             <Button fx:id="parseWidthButton" mnemonicParsing="false" onMouseClicked="#onWidthParseButtonClicked" text="Apply" />
-            <ComboBox fx:id="widthList" prefHeight="21.0">
+            <ComboBox fx:id="widthList" prefHeight="25.0" prefWidth="197.0" promptText="">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
