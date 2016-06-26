@@ -10,17 +10,21 @@ import java.util.regex.Pattern;
  */
 public class LogLineList {
     private List<LogLineClass> parsedLog;
+    private List<LogLineClass> filteredLog;
     private HashMap<Integer, Integer> line2pos;
     private HashMap<Integer, Integer> pos2line;
     private int columnCount;
     private int pos;
+    private String filter;
 
     public LogLineList() {
         this.parsedLog = new ArrayList<>();
+        this.filteredLog = parsedLog;
         this.line2pos = new HashMap<>();
         this.pos2line = new HashMap<>();
         this.columnCount = 0;
         this.pos = 0;
+        this.filter = "";
     }
 
     public LogLineClass addLine(String line) {
@@ -54,14 +58,28 @@ public class LogLineList {
     }
 
     public Integer lineByPos(int pos) {
-        return line2pos.get(pos);
+        return filteredLog.get(pos2line.get(pos)).getNumber();
     }
 
     public Integer posByLine(int line) {
-        return pos2line.get(line);
+        return line2pos.get(filteredLog.get(line - 1).getNumber());
     }
 
     public List<LogLineClass> getParsedLog() {
-        return parsedLog;
+        return filteredLog;
+    }
+
+    public List<LogLineClass> getParsedLog(String regex) {
+        if (regex == null || regex.trim().length() == 0) {
+            filteredLog = parsedLog;
+        } else {
+            filteredLog = new ArrayList<>();
+            for (LogLineClass llc : parsedLog) {
+                if (llc.getFullLine().matches(regex)) {
+                    filteredLog.add(llc);
+                }
+            }
+        }
+        return filteredLog;
     }
 }

@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -23,7 +22,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -64,32 +65,25 @@ public class Controller implements Initializable {
 
     private final Image redIcon = new Image(getClass().getResourceAsStream("/image/red_circle.png"));
 
+    public void onApplyFilter() {
+        fillTreeView();
+        fillTableView();
+    }
+
     private void fillTreeView() {
         TreeItem<String> rootItem = new TreeItem<>("root");
         rootItem.setExpanded(true);
 
-        for (LogLineClass llc : parsedLog.getParsedLog()) {
-            TreeItem<String> lineItem = null;
+        try {
+            Pattern.compile(filterText.getText());
+        } catch (PatternSyntaxException e) {
+            filterText.clear();
+        }
+
+        for (LogLineClass llc : parsedLog.getParsedLog(filterText.getText())) {
             String line = llc.getFullLine();
-
-            if (filterText.getLength() > 0) {
-                try {
-                    if (line.matches(filterText.getText())) {
-                        lineItem = new TreeItem<>(line, new ImageView(redIcon));
-                    } else if (!showUnmatched.isSelected()) {
-                        continue;
-                    }
-                } catch (PatternSyntaxException e) {
-                    errorLabel.setText(e.getMessage());
-                }
-            }
-
-            if (lineItem == null) {
-                lineItem = new TreeItem<>(line);
-            }
-
+            TreeItem<String> lineItem = new TreeItem<>(line);
             rootItem.getChildren().add(lineItem);
-
             if (llc.getFieldList().size() > 1) {
                 for (String block : llc.getFieldList()) {
                     TreeItem<String> blockItem = new TreeItem<>(block);
@@ -113,7 +107,14 @@ public class Controller implements Initializable {
             col.setCellValueFactory(new PropertyValueFactory<LogLineClass, String>("F" + i));
             destTable.getColumns().add(col);
         }
-        destTable.setItems(FXCollections.observableArrayList(parsedLog.getParsedLog()));
+
+        try {
+            Pattern.compile(filterText.getText());
+        } catch (PatternSyntaxException e) {
+            filterText.clear();
+        }
+
+        destTable.setItems(FXCollections.observableArrayList(parsedLog.getParsedLog(filterText.getText())));
     }
 
     public void onParseButtonClicked() {
@@ -155,12 +156,15 @@ public class Controller implements Initializable {
 
     public void onAddPositionButtonClicked() {
         int pos = sourceText.getCaretPosition();
-        widthList.getItems().add(pos);
-        widthList.setPromptText(Arrays.toString(widthList.getItems().toArray()));
+        if (!widthList.getItems().contains(pos)) {
+            widthList.getItems().add(pos);
+            widthList.setPromptText(Arrays.toString(widthList.getItems().toArray()));
+        }
     }
 
     public void onClearButtonClicked() {
         widthList.getItems().clear();
+        widthList.setPromptText("");
     }
 
     public void onDragOver(DragEvent event) {
@@ -184,7 +188,7 @@ public class Controller implements Initializable {
 
     public void onSynchronizeGrid() {
         Integer line = destTable.getSelectionModel().getSelectedIndex();
-        Integer pos = parsedLog.lineByPos(line + 1);
+        Integer pos = parsedLog.posByLine(line + 1);
         if (line == null || pos == null) return;
         destTree.getSelectionModel().select(line.intValue());
         destTree.scrollTo(line.intValue());
@@ -193,7 +197,13 @@ public class Controller implements Initializable {
     }
 
     public void onSynchronizeTree() {
-
+        Integer line = destTree.getSelectionModel().getSelectedIndex();
+        Integer pos = parsedLog.posByLine(line + 1);
+        if (line == null || pos == null) return;
+        destTable.getSelectionModel().select(line.intValue());
+        destTable.scrollTo(line.intValue());
+        sourceText.positionCaret(pos.intValue());
+        sourceText.selectForward();
     }
 
     public void onNextWord() {

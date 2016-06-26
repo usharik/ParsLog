@@ -29,7 +29,7 @@
                 </TreeView>
                 <ToolBar layoutY="0.0" prefWidth="862.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                   <items>
-                    <Button mnemonicParsing="false" text="Apply" />
+                    <Button mnemonicParsing="false" onMouseClicked="#onApplyFilter" text="Apply" />
                     <Label text="Filter" />
                     <TextField fx:id="filterText" prefWidth="241.0" style="-fx-font-size: 12px;&#10;-fx-font-family: monospace;" text="" />
                     <CheckBox id="showUnmached" fx:id="showUnmatched" mnemonicParsing="false" text="Show unmatched" />
