@@ -1,5 +1,6 @@
 # ParsLog
 Simple log parser with JavaFX UI
+
 With this application you can
 
 1. put source log text into application by drag and drop
